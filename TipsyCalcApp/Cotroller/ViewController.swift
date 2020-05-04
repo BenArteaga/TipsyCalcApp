@@ -18,6 +18,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var tipPercentageLbl: UILabel!
     @IBOutlet weak var textField: UITextField!
     
+    //split check IBOutlets
+    @IBOutlet weak var splitSlider: UISlider!
+    @IBOutlet weak var splitLabel: UILabel!
+    @IBOutlet weak var yourAmountLbl: UILabel!
+    
     var tip = TipModel(billAmount: 0.0, tipPercent: 0.0)
     
     override func viewDidLoad() {
@@ -32,10 +37,16 @@ class ViewController: UIViewController {
         tip.calculateTip()
     }
     
+    func setYourAmount() {
+        tip.splitNum = Int(splitSlider.value)
+        tip.calculateAmountYouPay()
+    }
+    
     func updateUI() {
         tipLbl.text = String(format: "$%0.2f", tip.tipAmount)
         totalLbl.text = String(format: "$%0.2f", tip.totalAmount)
         tipPercentageLbl.text = "Tip: \(Int(tipPercentageSlider.value * 100))%"
+        splitLabel.text = "\(Int(splitSlider.value))-Way Split"
     }
     
     @IBAction func tipPercDidChange(_ sender: UISlider) {
@@ -46,8 +57,14 @@ class ViewController: UIViewController {
         setTipCalcVals()
         updateUI()
     }
+    
     @IBAction func billAmountWasChanged(_ sender: Any) {
         setTipCalcVals()
+        updateUI()
+    }
+    
+    @IBAction func splitWasChanged(_ sender: UISlider) {
+        setYourAmount()
         updateUI()
     }
 }
